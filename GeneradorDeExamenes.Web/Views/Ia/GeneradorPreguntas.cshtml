@@ -1,0 +1,30 @@
+﻿@model ExamenModel
+
+@{
+    ViewData["Title"] = "GeneradorPreguntas";
+}
+
+<div class="container">
+    <h2 class="text-primary">Generar Preguntas</h2>
+
+    <form asp-action="GenerateQuestions" method="post" class="form-horizontal">
+        <div class="form-group">
+            <label for="resumen" class="col-md-2 control-label">Resumen:</label>
+            <div class="col-md-10">
+                <textarea id="resumen" name="Resumen" rows="4" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-primary">Generar Preguntas</button>
+            </div>
+        </div>
+    </form>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            <strong>Error:</strong> @ViewBag.Error
+        </div>
+    }
+</div>
