@@ -61,11 +61,11 @@ namespace GeneradorDeExamenes.Web.Controllers
             try
             {
                 var examenEntidad = examenModel.MapearAEntidad();
-                var feedback = await _iaService.GetFeedback(examenEntidad);
+                var examenConFeedback = await _iaService.GetFeedback(examenEntidad);
 
-                if (!string.IsNullOrEmpty(feedback))
+                if (examenConFeedback != null && !string.IsNullOrEmpty(examenConFeedback.Feedback))
                 {
-                    examenModel.Feedback = feedback;
+                    examenModel.Feedback = examenConFeedback.Feedback;
                     return View("MostrarFeedback", examenModel);
                 }
                 else
@@ -80,6 +80,7 @@ namespace GeneradorDeExamenes.Web.Controllers
                 return View("MostrarPreguntas", examenModel);
             }
         }
+
 
         public IActionResult MostrarFeedback(ExamenModel examenModel)
         {

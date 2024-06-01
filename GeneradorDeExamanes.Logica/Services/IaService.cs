@@ -1,6 +1,7 @@
 ﻿using GeneradorDeExamenes.Entidades;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace GeneradorDeExamanes.Logica.Services
     public interface IIaService
     {
         Task<string[]> GenerateQuestions(Examen examen);
-        Task<string> GetFeedback(Examen examen);
+        Task<Examen> GetFeedback(Examen examen);
         public List<Examen> GetExamenes();
 
     }
@@ -39,54 +40,76 @@ namespace GeneradorDeExamanes.Logica.Services
                 {
                     contents = new[]
                     {
-                    new
+                new
+                {
+                    parts = new[]
                     {
-                        parts = new[]
+                        new
                         {
-                            new
-                            {
-                                text = textoConPrompt
-                            }
+                            text = textoConPrompt
                         }
                     }
                 }
+            }
                 };
 
                 var jsonResponse = await _apiService.PostAsync("v1/models/gemini-1.5-pro:generateContent", requestBody);
                 var responseData = JsonConvert.DeserializeObject<dynamic>(jsonResponse);
-                var questions = new List<string>();
 
-                if (responseData != null && responseData["candidates"] != null && responseData["candidates"][0] != null
-                    && responseData["candidates"][0]["content"] != null && responseData["candidates"][0]["content"]["parts"] != null
-                    && responseData["candidates"][0]["content"]["parts"][0] != null && responseData["candidates"][0]["content"]["parts"][0]["text"] != null)
+                if (responseData == null)
                 {
-                    var text = responseData["candidates"][0]["content"]["parts"][0]["text"].ToString();
-                    var lines = text.Split('\n');
+                    _logger.LogError("La respuesta de la API es nula.");
+                    return null;
+                }
 
-                    foreach (var line in lines)
-                    {
-                        if (Regex.IsMatch(line, @"^\d+\.\s"))
-                        {
-                            questions.Add(line.Trim());
-                        }
-                    }
+                var candidates = responseData["candidates"];
+                if (candidates == null || candidates.Count == 0)
+                {
+                    _logger.LogError("No se encontraron candidatos en la respuesta de la API.");
+                    return null;
+                }
 
-                    if (questions.Any())
-                    {
-                        // Agregar el examen a la lista
-                        _examenes.Add(examen);
+                var content = candidates[0]["content"];
+                if (content == null)
+                {
+                    _logger.LogError("El contenido del candidato es nulo.");
+                    return null;
+                }
 
-                        return questions.ToArray();
-                    }
-                    else
+                var parts = content["parts"];
+                if (parts == null || parts.Count == 0)
+                {
+                    _logger.LogError("No se encontraron partes en el contenido.");
+                    return null;
+                }
+
+                var textPart = parts[0]["text"];
+                if (textPart == null)
+                {
+                    _logger.LogError("El texto de la parte es nulo.");
+                    return null;
+                }
+
+                var text = textPart.ToString();
+                var lines = text.Split('\n');
+
+                var questions = new List<string>();
+                foreach (var line in lines)
+                {
+                    if (Regex.IsMatch(line, @"^\d+\.\s"))
                     {
-                        _logger.LogError("No se encontraron preguntas en el texto.");
-                        return null;
+                        questions.Add(line.Trim());
                     }
+                }
+
+                if (questions.Any())
+                {
+                    _examenes.Add(examen);
+                    return questions.ToArray();
                 }
                 else
                 {
-                    _logger.LogError("La estructura de la respuesta de la API no es la esperada.");
+                    _logger.LogError("No se encontraron preguntas en el texto.");
                     return null;
                 }
             }
@@ -100,11 +123,11 @@ namespace GeneradorDeExamanes.Logica.Services
 
 
 
-        public async Task<string> GetFeedback(Examen examen)
+        public async Task<Examen> GetFeedback(Examen examen)
         {
             try
             {
-                var textoConRespuestas = "Quiero que me hagas una corrección de las siguientes preguntas y respuestas:\n\n";
+                var textoConRespuestas = "Quiero que me hagas una correccion de las respuestas a las preguntas que te envío, segun tu informacion hasta ahora, y que me digas correcto o incorrecto, si queres agregar una pequeña devolucion en el caso incorrecto, esta bien, de lo contrario solo limitate a poner correcto o incorrecto:\n\n";
                 foreach (var pregunta in examen.Preguntas)
                 {
                     textoConRespuestas += $"{pregunta.Texto}\nRespuesta: {pregunta.RespuestaUsuario}\n\n";
@@ -114,17 +137,17 @@ namespace GeneradorDeExamanes.Logica.Services
                 {
                     contents = new[]
                     {
-                    new
+                new
+                {
+                    parts = new[]
                     {
-                        parts = new[]
+                        new
                         {
-                            new
-                            {
-                                text = textoConRespuestas
-                            }
+                            text = textoConRespuestas
                         }
                     }
                 }
+            }
                 };
 
                 var jsonResponse = await _apiService.PostAsync("v1/models/gemini-1.5-pro:generateContent", requestBody);
@@ -134,7 +157,9 @@ namespace GeneradorDeExamanes.Logica.Services
                     && responseData["candidates"][0]["content"] != null && responseData["candidates"][0]["content"]["parts"] != null
                     && responseData["candidates"][0]["content"]["parts"][0] != null && responseData["candidates"][0]["content"]["parts"][0]["text"] != null)
                 {
-                    return responseData["candidates"][0]["content"]["parts"][0]["text"].ToString();
+                    var feedbackText = responseData["candidates"][0]["content"]["parts"][0]["text"].ToString();
+                    examen.Feedback = feedbackText;
+                    return examen;
                 }
                 else
                 {
@@ -148,6 +173,9 @@ namespace GeneradorDeExamanes.Logica.Services
                 return null;
             }
         }
+
+
+
 
         public List<Examen> GetExamenes()
         {
