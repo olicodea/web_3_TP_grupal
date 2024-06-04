@@ -1,6 +1,7 @@
 ﻿using GeneradorDeExamanes.Configurations;
 using Newtonsoft.Json;
 using System.Text;
+using GeneradorDeExamanes.Logica.Utils;
 
 namespace GeneradorDeExamanes.Logica.Services
 {
@@ -12,11 +13,13 @@ namespace GeneradorDeExamanes.Logica.Services
     {
         private readonly HttpClient _httpClient;
         private readonly ApiSettings _apiSettings;
+        private readonly KeyDecoder _keyDecoder;
 
-        public ApiService(HttpClient httpClient, ApiSettings apiSettings)
+        public ApiService(HttpClient httpClient, ApiSettings apiSettings, KeyDecoder keyDecoder)
         {
             _httpClient = httpClient;
             _apiSettings = apiSettings;
+            _keyDecoder = keyDecoder;
         }
 
         public async Task<string> PostAsync(string endpoint, object data)
@@ -24,8 +27,10 @@ namespace GeneradorDeExamanes.Logica.Services
 
             try
             {
+                string apiKey = _keyDecoder.Decode(_apiSettings.ApiKey);
+                
                 var requestContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync($"{_apiSettings.BaseUrl}/{endpoint}?key={_apiSettings.ApiKey}", requestContent);
+                var response = await _httpClient.PostAsync($"{_apiSettings.BaseUrl}/{endpoint}?key={apiKey}", requestContent);
 
                 response.EnsureSuccessStatusCode();
 
@@ -43,6 +48,8 @@ namespace GeneradorDeExamanes.Logica.Services
             }
 
         }
+        
+        
 
     }
 
