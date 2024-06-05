@@ -1,4 +1,4 @@
-html {
+/*html {
   font-size: 14px;
 }
 
@@ -15,4 +15,124 @@ html {
 
 body {
   margin-bottom: 60px;
+}*/
+
+@import url('https://fonts.googleapis.com/css2?family=Lemon&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+:root {
+    --colorPrincipal: #56a864;
+    --colorOscuro: #084b20;
+    --colorBotones: #6eb67a;
+    --colorClaro: #d9ecdc;
+}
+
+header.header {
+    display: flex;
+    align-items: flex-end;
+    gap: 50px;
+    background-color: var(--colorPrincipal);
+}
+
+span.logo {
+    font-family: "Lemon", serif;
+    font-size: 50px;
+    font-weight: 400;
+    font-style: normal;
+    padding: 10px 20px;
+    color: var(--colorOscuro);
+}
+
+nav.menu_de_navegacion {
+    display: flex;
+    gap: 10px;
+    text-align: center;
+    font-size: 25px;
+}
+
+a.menu {
+    padding: 20px 20px 8px;
+    min-width: 150px;
+    color: var(--colorOscuro);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+    a.menu:hover {
+        background-color: var(--colorBotones);
+        text-decoration: none;
+        color: var(--colorOscuro);
+    }
+
+footer {
+    background-color: var(--colorPrincipal);
+    text-align: center;
+    padding: 10px;
+    font-size: 20px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+main {
+    width: 100%;
+    font-size: 20px;
+}
+
+h2 {
+    color: #084b20;
+}
+
+/*HOME*/
+section#central {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100vh;
+    margin: 0 auto;
+    padding: 50px;
+}
+
+from {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+    /*RESPONDER*/
+    from.responder {
+        background-color: var(--colorClaro);
+        padding: 50px;
+        margin: 50px;
+    }
+
+span.pregunta {
+    font-weight: 500;
+    color: var(--colorOscuro);
+}
+
+/*CORRECCION*/
+div.card-group#preguntas {
+    margin: 20px;
+    gap: 20px
+}
+
+    div.card-group#preguntas .card {
+        background-color: var(--colorClaro);
+        border: 0;
+        min-width: 45%;
+    }
+
+h5 {
+    color: var(--colorOscuro);
+}
+
+@media (max-width: 1200px) {
+    section#central {
+        width: 90%;
+    }
 }

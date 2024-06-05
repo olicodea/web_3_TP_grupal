@@ -4,27 +4,25 @@
     ViewData["Title"] = "GeneradorPreguntas";
 }
 
-<div class="container">
-    <h2 class="text-primary">Generar Preguntas</h2>
 
-    <form asp-action="GenerateQuestions" method="post" class="form-horizontal">
-        <div class="form-group">
-            <label for="resumen" class="col-md-2 control-label">Resumen:</label>
-            <div class="col-md-10">
-                <textarea id="resumen" name="Resumen" rows="4" class="form-control"></textarea>
-            </div>
+<section id="central">
+    <h2>Simulador de exámenes gratuito impulsado por IA</h2>
+    <p>
+        El simulador genera preguntas a partir de un texto, donde podrás
+        responder y recibir una corrección en el momento, todo impulsado por
+        la potencia de la IA.
+    </p>
+    <form class="texto w-100 " asp-action="GenerateQuestions" method="post">
+        <div class="form-group w-100">
+            <label for="texto">Texto detallado</label>
+            <textarea class="form-control" id="texto" rows="10"></textarea>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <button type="submit" class="btn btn-primary">Generar Preguntas</button>
-            </div>
-        </div>
+        <button type="submit" class="boton1 btn btn-lg btn-success w-50">Generar examen</button>
     </form>
-
     @if (ViewBag.Error != null)
     {
         <div class="alert alert-danger">
             <strong>Error:</strong> @ViewBag.Error
         </div>
     }
-</div>
+</section>
