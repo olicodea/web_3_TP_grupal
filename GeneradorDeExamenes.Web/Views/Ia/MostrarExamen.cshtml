@@ -1,33 +1,7 @@
-﻿@model ExamenModel
-
-@{
-    ViewData["Title"] = "MostrarFeedback";
-}
-@* <div class="container">
-    <h2 class="text-primary">Feedback de las Respuestas</h2>
-
-@if (!string.IsNullOrEmpty(Model.Feedback))
-{
-        <div class="alert alert-info">
-    <pre>@Model.Feedback</pre>
-        </div>
-}
-else
-{
-        <p class="text-warning">No se pudo obtener el feedback.</p>
-}
-
-@if (ViewBag.Error != null)
-{
-        <div class="alert alert-danger">
-            <strong>Error:</strong>@ViewBag.Error
-        </div>
-}
-</div> *@
-
-<section id="central">
+﻿<section id="central">
     <h2>Resultado de examen #8 - Clasificacion 8/10</h2>
     <div class="card-group" id="preguntas">
+        
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Pregunta #1</h5>
@@ -45,6 +19,8 @@ else
             </div>
         </div>
         
-    <button type="submit" class="boton1 btn btn-lg btn-success w-50">Guardar examen</button>
+       
+
+    </div>
 
 </section>

@@ -60,6 +60,7 @@ a.menu {
     color: var(--colorOscuro);
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+    text-decoration:none;
 }
 
     a.menu:hover {
@@ -97,17 +98,23 @@ section#central {
     padding: 50px;
 }
 
-from {
+form {
     display: flex;
     align-items: center;
     flex-direction: column;
 }
+
 
     /*RESPONDER*/
     from.responder {
         background-color: var(--colorClaro);
         padding: 50px;
         margin: 50px;
+        min-width: 650px;
+    }
+
+    from.responder div {
+        margin: 10px 0;
     }
 
 span.pregunta {
@@ -131,8 +138,17 @@ h5 {
     color: var(--colorOscuro);
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 850px) {
     section#central {
         width: 90%;
+        padding: auto 0;
     }
+    from.responder {
+        margin: 0px;
+        width: 90%;
+    }
+}
+
+div.alert-danger {
+    margin: 50px auto;
 }

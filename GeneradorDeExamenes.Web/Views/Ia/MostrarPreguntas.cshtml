@@ -4,34 +4,30 @@
     ViewData["Title"] = "MostrarPreguntas";
 }
 
-<div class="container">
-    <h2 class="text-primary">Preguntas Generadas</h2>
+
+<section id="central">
+    <h2>Simulador de exámenes gratuito impulsado por IA</h2>
 
     @if (Model != null && Model.Preguntas.Any())
     {
-        <form method="post" asp-action="CorregirRespuestas" class="form-horizontal">
-            <ul class="list-group">
+        <from method="post" asp-action="CorregirRespuestas" class="responder">
                 @for (int i = 0; i < Model.Preguntas.Count; i++)
                 {
-                    <li class="list-group-item">
-                        <p>@Model.Preguntas[i].Texto</p>
-                        <input type="hidden" name="Preguntas[@i].Texto" value="@Model.Preguntas[i].Texto" />
-                        <div class="form-group">
-                            <label for="respuesta_@i" class="col-md-2 control-label">Respuesta:</label>
-                            <div class="col-md-10">
-                                <input type="text" id="respuesta_@i" name="Preguntas[@i].RespuestaUsuario" value="@Model.Preguntas[i].RespuestaUsuario" class="form-control" />
-                            </div>
-                        </div>
-                    </li>
-                }
-            </ul>
-            <input type="hidden" name="Resumen" value="@Model.Resumen" />
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <button type="submit" class="btn btn-primary">Corregir respuestas</button>
+                <div class="form-group w-100">
+                    <p>
+                        <span class="pregunta">Pregunta [@(i + 1)]:</span> <br>
+                        @Model.Preguntas[i].Texto
+                    </p>
+                    <label for="respuesta_@i">Respuesta:</label>
+                    <textarea class="form-control" id="respuesta_@i" name="Preguntas[@i].RespuestaUsuario" value="@Model.Preguntas[i].RespuestaUsuario" rows="3"></textarea>
                 </div>
-            </div>
-        </form>
+                <hr>
+                }
+
+            <input type="hidden" name="Resumen" value="@Model.Resumen" />
+            <button type="submit" class="boton1 btn btn-lg btn-success w-50 mt-2">Confirmar respuestas</button>
+
+        </from>
     }
     else
     {
@@ -44,4 +40,5 @@
             <strong>Error:</strong> @ViewBag.Error
         </div>
     }
-</div>
+
+</section>
