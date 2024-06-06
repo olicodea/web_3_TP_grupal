@@ -1,11 +1,15 @@
 using GeneradorDeExamanes.Configurations;
 using GeneradorDeExamanes.Logica.Services;
+using GeneradorDeExamanes.Logica.Utils;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//Configure DecryptPassword
+builder.Services.AddTransient<KeyDecoder>();
 
 // Configure ApiSettings
 builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
