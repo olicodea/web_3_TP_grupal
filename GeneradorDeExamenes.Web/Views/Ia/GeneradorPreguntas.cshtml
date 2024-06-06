@@ -12,12 +12,12 @@
         responder y recibir una corrección en el momento, todo impulsado por
         la potencia de la IA.
     </p>
-    <form class="texto w-100 " asp-action="GenerateQuestions" method="post">
+    <form class="texto w-100" asp-action="GenerateQuestions" method="post">
         <div class="form-group w-100">
             <label for="resumen">Texto detallado</label>
-            <textarea class="form-control" name="resumen" id="resumen" rows="10"></textarea>
+            <textarea class="form-control" name="Resumen" id="resumen" rows="10"></textarea>
         </div>
-        <button type="submit" class="boton1 btn btn-lg btn-success w-50">Generar examen</button>
+        <button type="submit" class="boton1 btn btn-lg btn-success w-50 mt-4">Generar examen</button>
     </form>
     @if (ViewBag.Error != null)
     {

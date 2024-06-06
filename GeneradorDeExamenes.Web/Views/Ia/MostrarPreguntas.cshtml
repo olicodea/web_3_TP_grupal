@@ -10,7 +10,7 @@
 
     @if (Model != null && Model.Preguntas.Any())
     {
-        <from method="post" asp-action="CorregirRespuestas" class="responder">
+        <form method="post" asp-action="CorregirRespuestas" class="responder py-3">
                 @for (int i = 0; i < Model.Preguntas.Count; i++)
                 {
                 <div class="form-group w-100">
@@ -18,6 +18,9 @@
                         <span class="pregunta">Pregunta [@(i + 1)]:</span> <br>
                         @Model.Preguntas[i].Texto
                     </p>
+
+                    <input type="hidden" name="Preguntas[@i].Texto" value="@Model.Preguntas[i].Texto" />
+
                     <label for="respuesta_@i">Respuesta:</label>
                     <textarea class="form-control" id="respuesta_@i" name="Preguntas[@i].RespuestaUsuario" value="@Model.Preguntas[i].RespuestaUsuario" rows="3"></textarea>
                 </div>
@@ -27,7 +30,7 @@
             <input type="hidden" name="Resumen" value="@Model.Resumen" />
             <button type="submit" class="boton1 btn btn-lg btn-success w-50 mt-2">Confirmar respuestas</button>
 
-        </from>
+        </form>
     }
     else
     {
