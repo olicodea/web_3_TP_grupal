@@ -4,13 +4,13 @@
     ViewData["Title"] = "MostrarPreguntas";
 }
 
-<div class="container">
-    <h2 class="text-primary">Preguntas Generadas</h2>
+
+<section id="central">
+    <h2>Simulador de exámenes gratuito impulsado por IA</h2>
 
     @if (Model != null && Model.Preguntas.Any())
     {
-        <form method="post" asp-action="CorregirRespuestas" class="form-horizontal">
-            <ul class="list-group">
+        <form method="post" asp-action="CorregirRespuestas" class="responder py-3">
                 @for (int i = 0; i < Model.Preguntas.Count; i++)
                 {
                     <li class="list-group-item">
@@ -24,13 +24,10 @@
                         </div>
                     </li>
                 }
-            </ul>
+
             <input type="hidden" name="Resumen" value="@Model.Resumen" />
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <button type="submit" class="btn btn-primary">Corregir respuestas</button>
-                </div>
-            </div>
+            <button type="submit" class="boton1 btn btn-lg btn-success w-50 mt-2">Confirmar respuestas</button>
+
         </form>
     }
     else
@@ -44,4 +41,5 @@
             <strong>Error:</strong> @ViewBag.Error
         </div>
     }
-</div>
+
+</section>
