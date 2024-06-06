@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneradorDeExamenes.Web", "GeneradorDeExamenes.Web\GeneradorDeExamenes.Web.csproj", "{54744D89-8D2A-41D6-9D8A-D6C2B70369D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneradorDeExamenes.Web", "GeneradorDeExamenes.Web\GeneradorDeExamenes.Web.csproj", "{54744D89-8D2A-41D6-9D8A-D6C2B70369D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneradorDeExamanes.Configurations", "GeneradorDeExamanes.Configurations\GeneradorDeExamanes.Configurations.csproj", "{125CA834-140A-45F5-9EF4-A7C8E2A3F640}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneradorDeExamanes.Configurations", "GeneradorDeExamanes.Configurations\GeneradorDeExamanes.Configurations.csproj", "{125CA834-140A-45F5-9EF4-A7C8E2A3F640}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneradorDeExamenes.Entidades", "GeneradorDeExamenes.Entidades\GeneradorDeExamenes.Entidades.csproj", "{EFE25C00-016C-4B3A-81BA-C830574E578E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneradorDeExamenes.Entidades", "GeneradorDeExamenes.Entidades\GeneradorDeExamenes.Entidades.csproj", "{EFE25C00-016C-4B3A-81BA-C830574E578E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneradorDeExamanes.Logica", "GeneradorDeExamanes.Logica\GeneradorDeExamanes.Logica.csproj", "{F7373DD8-4C1A-4311-AB13-FF83E63700B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeneradorDeExamanes.Logica", "GeneradorDeExamanes.Logica\GeneradorDeExamanes.Logica.csproj", "{F7373DD8-4C1A-4311-AB13-FF83E63700B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneradorDeExamenes.Models", "GeneradorDeExamenes.Models\GeneradorDeExamenes.Models.csproj", "{2DB5A1E6-33E0-41D8-B93F-2D0DB8BABD19}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{F7373DD8-4C1A-4311-AB13-FF83E63700B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7373DD8-4C1A-4311-AB13-FF83E63700B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7373DD8-4C1A-4311-AB13-FF83E63700B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DB5A1E6-33E0-41D8-B93F-2D0DB8BABD19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DB5A1E6-33E0-41D8-B93F-2D0DB8BABD19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DB5A1E6-33E0-41D8-B93F-2D0DB8BABD19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DB5A1E6-33E0-41D8-B93F-2D0DB8BABD19}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

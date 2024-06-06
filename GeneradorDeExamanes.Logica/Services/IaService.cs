@@ -1,4 +1,5 @@
 ﻿using GeneradorDeExamenes.Entidades;
+using GeneradorDeExamenes.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -9,129 +10,128 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace GeneradorDeExamanes.Logica.Services
+namespace GeneradorDeExamanes.Logica.Services;
+
+public interface IIaService
 {
-    public interface IIaService
-    {
-        Task<string[]> GenerateQuestions(Examen examen);
-        Task<Examen> GetFeedback(Examen examen);
-        public List<Examen> GetExamenes();
+    Task<string[]> GenerateQuestions(ExamenViewModel examen);
+    Task<ExamenViewModel> GetFeedback(ExamenViewModel examen);
+    public List<ExamenViewModel> GetExamenes();
 
+}
+public class IaService : IIaService
+{
+    private static readonly List<ExamenViewModel> _examenes = new List<ExamenViewModel>();
+    private readonly IApiService _apiService;
+    private readonly ILogger<IaService> _logger;
+
+    public IaService(IApiService apiService, ILogger<IaService> logger)
+    {
+        _apiService = apiService;
+        _logger = logger;
     }
-    public class IaService : IIaService
+
+    public async Task<string[]> GenerateQuestions(ExamenViewModel examen)
     {
-        private static readonly List<Examen> _examenes = new List<Examen>();
-        private readonly IApiService _apiService;
-        private readonly ILogger<IaService> _logger;
-
-        public IaService(IApiService apiService, ILogger<IaService> logger)
+        try
         {
-            _apiService = apiService;
-            _logger = logger;
-        }
-
-        public async Task<string[]> GenerateQuestions(Examen examen)
-        {
-            try
+            var requestBody = new
             {
-                var requestBody = new
-                {
-                    contents = new[] { new { parts = new[] { new { text = $"Generame 10 preguntas de este texto: {examen.TextoOriginal}" } } } }
-                };
+                contents = new[] { new { parts = new[] { new { text = $"Generame 10 preguntas de este texto: {examen.Resumen}" } } } }
+            };
 
-                var jsonResponse = await _apiService.PostAsync("v1/models/gemini-1.5-pro:generateContent", requestBody);
-                var responseData = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
+            var jsonResponse = await _apiService.PostAsync("v1/models/gemini-1.5-pro:generateContent", requestBody);
+            var responseData = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
 
-                if (responseData == null || responseData.Candidates == null || responseData.Candidates.Count == 0)
-                {
-                    _logger.LogError("No se encontraron candidatos en la respuesta de la API.");
-                    return null;
-                }
-
-                var questions = ExtractQuestions(responseData.Candidates[0].Content.Parts);
-                if (questions.Any())
-                {
-                    _examenes.Add(examen);
-                    return questions.ToArray();
-                }
-                else
-                {
-                    _logger.LogError("No se encontraron preguntas en el texto.");
-                    return null;
-                }
+            if (responseData == null || responseData.Candidates == null || responseData.Candidates.Count == 0)
+            {
+                _logger.LogError("No se encontraron candidatos en la respuesta de la API.");
+                return null;
             }
-            catch (Exception ex)
+
+            var questions = ExtractQuestions(responseData.Candidates[0].Content.Parts);
+            if (questions.Any())
             {
-                _logger.LogError($"Excepción al llamar a la API: {ex.Message}");
+                _examenes.Add(examen);
+                return questions.ToArray();
+            }
+            else
+            {
+                _logger.LogError("No se encontraron preguntas en el texto.");
                 return null;
             }
         }
-
-        private List<string> ExtractQuestions(List<Part> parts)
+        catch (Exception ex)
         {
-            var questions = new List<string>();
-            foreach (var part in parts)
-            {
-                var text = part.Text;
-                var lines = text.Split('\n');
-                foreach (var line in lines)
-                {
-                    if (Regex.IsMatch(line, @"^\d+\.\s"))
-                    {
-                        questions.Add(line.Trim());
-                    }
-                }
-            }
-            return questions;
+            _logger.LogError($"Excepción al llamar a la API: {ex.Message}");
+            return null;
         }
+    }
 
-        public async Task<Examen> GetFeedback(Examen examen)
+    private List<string> ExtractQuestions(List<Part> parts)
+    {
+        var questions = new List<string>();
+        foreach (var part in parts)
         {
-            try
+            var text = part.Text;
+            var lines = text.Split('\n');
+            foreach (var line in lines)
             {
-                var textoConRespuestas = BuildFeedbackText(examen);
-
-                var requestBody = new
+                if (Regex.IsMatch(line, @"^\d+\.\s"))
                 {
-                    contents = new[] { new { parts = new[] { new { text = textoConRespuestas } } } }
-                };
-
-                var jsonResponse = await _apiService.PostAsync("v1/models/gemini-1.5-pro:generateContent", requestBody);
-                var responseData = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
-
-                if (responseData != null && responseData.Candidates != null && responseData.Candidates.Count > 0 &&
-                    responseData.Candidates[0].Content != null && responseData.Candidates[0].Content.Parts != null)
-                {
-                    examen.Feedback = responseData.Candidates[0].Content.Parts[0].Text;
-                    return examen;
-                }
-                else
-                {
-                    _logger.LogError("La estructura de la respuesta de la API no es la esperada.");
-                    return null;
+                    questions.Add(line.Trim());
                 }
             }
-            catch (Exception ex)
+        }
+        return questions;
+    }
+
+    public async Task<ExamenViewModel> GetFeedback(ExamenViewModel examen)
+    {
+        try
+        {
+            var textoConRespuestas = BuildFeedbackText(examen);
+
+            var requestBody = new
             {
-                _logger.LogError($"Excepción al llamar a la API: {ex.Message}");
+                contents = new[] { new { parts = new[] { new { text = textoConRespuestas } } } }
+            };
+
+            var jsonResponse = await _apiService.PostAsync("v1/models/gemini-1.5-pro:generateContent", requestBody);
+            var responseData = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
+
+            if (responseData != null && responseData.Candidates != null && responseData.Candidates.Count > 0 &&
+                responseData.Candidates[0].Content != null && responseData.Candidates[0].Content.Parts != null)
+            {
+                examen.Feedback = responseData.Candidates[0].Content.Parts[0].Text;
+                return examen;
+            }
+            else
+            {
+                _logger.LogError("La estructura de la respuesta de la API no es la esperada.");
                 return null;
             }
         }
-
-        private string BuildFeedbackText(Examen examen)
+        catch (Exception ex)
         {
-            var textoConRespuestas = "Quiero que me hagas una correccion de las respuestas a las preguntas que te envío, segun tu informacion hasta ahora, y que me digas correcto o incorrecto, si queres agregar una pequeña devolucion en el caso incorrecto, esta bien, de lo contrario solo limitate a poner correcto o incorrecto:\n\n";
-            foreach (var pregunta in examen.Preguntas)
-            {
-                textoConRespuestas += $"{pregunta.Texto}\nRespuesta: {pregunta.RespuestaUsuario}\n\n";
-            }
-            return textoConRespuestas;
+            _logger.LogError($"Excepción al llamar a la API: {ex.Message}");
+            return null;
         }
-
-        public List<Examen> GetExamenes()
-        {
-            return _examenes;
-        }
-
     }
+
+    private string BuildFeedbackText(ExamenViewModel examen)
+    {
+        var textoConRespuestas = "Quiero que me hagas una correccion de las respuestas a las preguntas que te envío, segun tu informacion hasta ahora, y que me digas correcto o incorrecto, si queres agregar una pequeña devolucion en el caso incorrecto, esta bien, de lo contrario solo limitate a poner correcto o incorrecto:\n\n";
+        foreach (var preguntaModel in examen.Preguntas)
+        {
+            textoConRespuestas += $"{preguntaModel.PreguntaTexto}\nRespuesta: {preguntaModel.RespuestaUsuario}\n\n";
+        }
+        return textoConRespuestas;
+    }
+
+    public List<ExamenViewModel> GetExamenes()
+    {
+        return _examenes;
+    }
+
 }

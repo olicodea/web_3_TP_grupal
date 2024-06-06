@@ -2,49 +2,46 @@
 using Newtonsoft.Json;
 using System.Text;
 
-namespace GeneradorDeExamanes.Logica.Services
+namespace GeneradorDeExamanes.Logica.Services;
+
+public interface IApiService
 {
-    public interface IApiService
+    Task<string> PostAsync(string endpoint, object data);
+}
+public class ApiService :IApiService
+{
+    private readonly HttpClient _httpClient;
+    private readonly ApiSettings _apiSettings;
+
+    public ApiService(HttpClient httpClient, ApiSettings apiSettings)
     {
-        Task<string> PostAsync(string endpoint, object data);
+        _httpClient = httpClient;
+        _apiSettings = apiSettings;
     }
-    public class ApiService :IApiService
+
+    public async Task<string> PostAsync(string endpoint, object data)
     {
-        private readonly HttpClient _httpClient;
-        private readonly ApiSettings _apiSettings;
 
-        public ApiService(HttpClient httpClient, ApiSettings apiSettings)
+        try
         {
-            _httpClient = httpClient;
-            _apiSettings = apiSettings;
+            var requestContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync($"{_apiSettings.BaseUrl}/{endpoint}?key={_apiSettings.ApiKey}", requestContent);
+
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsStringAsync();
         }
-
-        public async Task<string> PostAsync(string endpoint, object data)
+        catch (HttpRequestException httpRequestException)
         {
-
-            try
-            {
-                var requestContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync($"{_apiSettings.BaseUrl}/{endpoint}?key={_apiSettings.ApiKey}", requestContent);
-
-                response.EnsureSuccessStatusCode();
-
-                return await response.Content.ReadAsStringAsync();
-            }
-            catch (HttpRequestException httpRequestException)
-            {
-                // Manejo específico de excepciones HTTP
-                throw new Exception($"Error al realizar la solicitud HTTP: {httpRequestException.Message}", httpRequestException);
-            }
-            catch (Exception ex)
-            {
-                // Manejo general de excepciones
-                throw new Exception($"Error al realizar la solicitud: {ex.Message}", ex);
-            }
-
+            // Manejo específico de excepciones HTTP
+            throw new Exception($"Error al realizar la solicitud HTTP: {httpRequestException.Message}", httpRequestException);
+        }
+        catch (Exception ex)
+        {
+            // Manejo general de excepciones
+            throw new Exception($"Error al realizar la solicitud: {ex.Message}", ex);
         }
 
     }
-
 
 }
