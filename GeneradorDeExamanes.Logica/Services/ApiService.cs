@@ -27,8 +27,8 @@ public class ApiService :IApiService
 
             try
             {
-                var requestContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
-                var response = await _httpClient.PostAsync($"{_apiSettings.BaseUrl}/{endpoint}?key={_apiSettings.ApiKey}", requestContent);
+                string apiKey = _keyDecoder.Decode(_apiSettings.ApiKey);
+
                 var requestContent = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync($"{_apiSettings.BaseUrl}/{endpoint}?key={apiKey}", requestContent);
 
@@ -45,8 +45,6 @@ public class ApiService :IApiService
         {
             // Manejo general de excepciones
             throw new Exception($"Error al realizar la solicitud: {ex.Message}", ex);
-        }
-
         }
 
     }

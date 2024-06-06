@@ -13,9 +13,9 @@
         <form method="post" asp-action="CorregirRespuestas" class="responder py-3">
                 @for (int i = 0; i < Model.Preguntas.Count; i++)
                 {
-                    <li class="list-group-item">
+                    <input type="hidden" name="Preguntas[@i].PreguntaTexto" value="@Model.Preguntas[i].PreguntaTexto" />
+                    <li class="list-group-item w-100 my-1">
                         <p>@Model.Preguntas[i].PreguntaTexto</p>
-                        <input type="hidden" name="Preguntas[@i].PreguntaTexto" value="@Model.Preguntas[i].PreguntaTexto" />
                         <div class="form-group">
                             <label for="respuesta_@i" class="col-md-2 control-label">Respuesta:</label>
                             <div class="col-md-10">
