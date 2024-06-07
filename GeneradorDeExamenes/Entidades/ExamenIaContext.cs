@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace GeneradorDeExamenes.Entidades;
+namespace GeneradorDeExamenes.Web;
 
-public partial class ExamenIAContext : DbContext
+public partial class ExamenIaContext : DbContext
 {
-    public ExamenIAContext()
+    public ExamenIaContext()
     {
     }
 
-    public ExamenIAContext(DbContextOptions<ExamenIAContext> options)
+    public ExamenIaContext(DbContextOptions<ExamenIaContext> options)
         : base(options)
     {
     }
@@ -20,23 +20,24 @@ public partial class ExamenIAContext : DbContext
     public virtual DbSet<Preguntum> Pregunta { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=DESKTOP-1N3OSRL\\SQLEXPRESS;Database=ExamenIA;Trusted_Connection=True;TrustServerCertificate=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Examan>(entity =>
         {
-            entity.HasKey(e => e.IdExamen).HasName("PK__Examen__0E8DC9BEFC552D88");
+            entity.HasKey(e => e.IdExamen).HasName("PK__Examen__0E8DC9BE4AB36D21");
         });
 
         modelBuilder.Entity<Preguntum>(entity =>
         {
-            entity.HasKey(e => e.IdPregunta).HasName("PK__Pregunta__754EC09E3DB19625");
+            entity.HasKey(e => e.IdPregunta).HasName("PK__Pregunta__754EC09E6A00DE24");
 
             entity.HasOne(d => d.IdExamenNavigation).WithMany(p => p.Pregunta)
                 .HasForeignKey(d => d.IdExamen)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Pregunta__IdExam__4BAC3F29");
+                .HasConstraintName("FK__Pregunta__IdExam__5FB337D6");
         });
 
         OnModelCreatingPartial(modelBuilder);

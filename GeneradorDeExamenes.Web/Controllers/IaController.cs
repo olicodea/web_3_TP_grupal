@@ -1,4 +1,5 @@
 ﻿using GeneradorDeExamanes.Logica.Services;
+using GeneradorDeExamenes.Logica.Services;
 using GeneradorDeExamenes.Models;
 
 using Microsoft.AspNetCore.Mvc;
@@ -8,10 +9,12 @@ namespace GeneradorDeExamenes.Web.Controllers;
 public class IaController : Controller
 {
     private readonly IIaService _iaService;
+    private readonly IExamenService _examenService;
 
-    public IaController(IIaService iaService)
+    public IaController(IIaService iaService, IExamenService examenService)
     {
         _iaService = iaService;
+        _examenService = examenService;
     }
 
     public IActionResult GeneradorPreguntas()
@@ -65,6 +68,9 @@ public class IaController : Controller
             if (examenConFeedback != null && !string.IsNullOrEmpty(examenConFeedback.Feedback))
             {
                 examenModel.Feedback = examenConFeedback.Feedback;
+
+                await _examenService.AddExamenAsync(examenModel);
+
                 return View("MostrarFeedback", examenModel);
             }
             else
@@ -72,6 +78,7 @@ public class IaController : Controller
                 ViewBag.Error = "No se pudo obtener el feedback.";
                 return View("MostrarPreguntas", examenModel);
             }
+
         }
         catch (Exception ex)
         {
