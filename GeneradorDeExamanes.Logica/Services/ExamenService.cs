@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace GeneradorDeExamenes.Logica.Services;
+namespace GeneradorDeExamanes.Logica.Services;
 
 public interface IExamenService
 {
@@ -18,10 +18,10 @@ public interface IExamenService
 }
 public class ExamenService : IExamenService
 {
-    private readonly ExamenIAContext _context;
+    private readonly ExamenIaContext _context;
     private readonly ILogger<ExamenService> _logger;
 
-    public ExamenService(ExamenIAContext context, ILogger<ExamenService> logger)
+    public ExamenService(ExamenIaContext context, ILogger<ExamenService> logger)
     {
         _context = context;
         _logger = logger;

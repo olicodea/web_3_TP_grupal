@@ -11,9 +11,9 @@ public partial class Preguntum
 
     public string PreguntaTexto { get; set; } = null!;
 
-    public string? RespuestaCorrecta { get; set; }
+    public string RespuestaUsuario { get; set; } = null!;
 
-    public string? RespuestaUsuario { get; set; }
+    public string? RespuestaCorrecta { get; set; }
 
     public virtual Examan IdExamenNavigation { get; set; } = null!;
 }

@@ -2,7 +2,6 @@ using GeneradorDeExamanes.Configurations;
 using GeneradorDeExamanes.Logica.Services;
 using GeneradorDeExamanes.Logica.Utils;
 using GeneradorDeExamenes.Entidades;
-using GeneradorDeExamenes.Logica.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -20,7 +19,7 @@ builder.Services.AddSingleton(resolver => resolver.GetRequiredService<IOptions<A
 
 
 // Add services to the container.
-builder.Services.AddDbContext<ExamenIAContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<ExamenIaContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register services
 builder.Services.AddHttpClient<IApiService, ApiService>();

@@ -1,5 +1,4 @@
 ﻿using GeneradorDeExamanes.Logica.Services;
-using GeneradorDeExamenes.Logica.Services;
 using GeneradorDeExamenes.Models;
 
 using Microsoft.AspNetCore.Mvc;
