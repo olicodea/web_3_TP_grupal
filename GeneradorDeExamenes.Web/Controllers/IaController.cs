@@ -1,90 +1,88 @@
 ﻿using GeneradorDeExamanes.Logica.Services;
-using GeneradorDeExamenes.Web.Models;
+using GeneradorDeExamenes.Models;
+
 using Microsoft.AspNetCore.Mvc;
 
-namespace GeneradorDeExamenes.Web.Controllers
+namespace GeneradorDeExamenes.Web.Controllers;
+
+public class IaController : Controller
 {
-    public class IaController : Controller
+    private readonly IIaService _iaService;
+
+    public IaController(IIaService iaService)
     {
-        private readonly IIaService _iaService;
+        _iaService = iaService;
+    }
 
-        public IaController(IIaService iaService)
-        {
-            _iaService = iaService;
-        }
+    public IActionResult GeneradorPreguntas()
+    {
+        return View(new ExamenViewModel());
+    }
 
-        public IActionResult GeneradorPreguntas()
+    [HttpPost]
+    public async Task<IActionResult> GenerateQuestions(ExamenViewModel examenModel)
+    {
+        try
         {
-            return View(new ExamenModel());
-        }
+            var preguntasGeneradas = await _iaService.GenerateQuestions(examenModel);
 
-        [HttpPost]
-        public async Task<IActionResult> GenerateQuestions(ExamenModel examenModel)
-        {
-            try
+            if (preguntasGeneradas != null && preguntasGeneradas.Any())
             {
-                var examenEntidad = examenModel.MapearAEntidad();
-                var preguntasGeneradas = await _iaService.GenerateQuestions(examenEntidad);
-
-                if (preguntasGeneradas != null && preguntasGeneradas.Any())
+                examenModel.Preguntas = preguntasGeneradas.Select(p =>
                 {
-                    examenModel.Preguntas = preguntasGeneradas.Select(p =>
-                    {
-                        var preguntaModel = new PreguntaModel();
-                        preguntaModel.ParsearPregunta(p);
-                        return preguntaModel;
-                    }).ToList();
+                    var preguntaModel = new PreguntaModel();
+                    preguntaModel.ParsearPregunta(p);
+                    return preguntaModel;
+                }).ToList();
 
-                    return View("MostrarPreguntas", examenModel);
-                }
-                else
-                {
-                    ViewBag.Error = "No se pudieron generar preguntas.";
-                    return View("GeneradorPreguntas", examenModel);
-                }
+                return View("MostrarPreguntas", examenModel);
             }
-            catch (Exception ex)
+            else
             {
-                ViewBag.Error = "Error al generar preguntas: " + ex.Message;
+                ViewBag.Error = "No se pudieron generar preguntas.";
                 return View("GeneradorPreguntas", examenModel);
             }
         }
-
-        public IActionResult MostrarPreguntas(ExamenModel examenModel)
+        catch (Exception ex)
         {
-            return View(examenModel);
+            ViewBag.Error = "Error al generar preguntas: " + ex.Message;
+            return View("GeneradorPreguntas", examenModel);
         }
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> CorregirRespuestas(ExamenModel examenModel)
+    public IActionResult MostrarPreguntas(ExamenViewModel examenModel)
+    {
+        return View(examenModel);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CorregirRespuestas(ExamenViewModel examenModel)
+    {
+        try
         {
-            try
-            {
-                var examenEntidad = examenModel.MapearAEntidad();
-                var examenConFeedback = await _iaService.GetFeedback(examenEntidad);
+            var examenConFeedback = await _iaService.GetFeedback(examenModel);
 
-                if (examenConFeedback != null && !string.IsNullOrEmpty(examenConFeedback.Feedback))
-                {
-                    examenModel.Feedback = examenConFeedback.Feedback;
-                    return View("MostrarFeedback", examenModel);
-                }
-                else
-                {
-                    ViewBag.Error = "No se pudo obtener el feedback.";
-                    return View("MostrarPreguntas", examenModel);
-                }
-            }
-            catch (Exception ex)
+            if (examenConFeedback != null && !string.IsNullOrEmpty(examenConFeedback.Feedback))
             {
-                ViewBag.Error = "Error al obtener el feedback: " + ex.Message;
+                examenModel.Feedback = examenConFeedback.Feedback;
+                return View("MostrarFeedback", examenModel);
+            }
+            else
+            {
+                ViewBag.Error = "No se pudo obtener el feedback.";
                 return View("MostrarPreguntas", examenModel);
             }
         }
-
-
-        public IActionResult MostrarFeedback(ExamenModel examenModel)
+        catch (Exception ex)
         {
-            return View(examenModel);
+            ViewBag.Error = "Error al obtener el feedback: " + ex.Message;
+            return View("MostrarPreguntas", examenModel);
         }
+    }
+
+
+    public IActionResult MostrarFeedback(ExamenViewModel examenModel)
+    {
+        return View(examenModel);
     }
 }

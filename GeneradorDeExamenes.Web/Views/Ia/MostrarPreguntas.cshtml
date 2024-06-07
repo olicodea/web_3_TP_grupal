@@ -1,4 +1,4 @@
-﻿@model ExamenModel
+﻿@model ExamenViewModel
 
 @{
     ViewData["Title"] = "MostrarPreguntas";
@@ -13,18 +13,16 @@
         <form method="post" asp-action="CorregirRespuestas" class="responder py-3">
                 @for (int i = 0; i < Model.Preguntas.Count; i++)
                 {
-                <div class="form-group w-100">
-                    <p>
-                        <span class="pregunta">Pregunta [@(i + 1)]:</span> <br>
-                        @Model.Preguntas[i].Texto
-                    </p>
-
-                    <input type="hidden" name="Preguntas[@i].Texto" value="@Model.Preguntas[i].Texto" />
-
-                    <label for="respuesta_@i">Respuesta:</label>
-                    <textarea class="form-control" id="respuesta_@i" name="Preguntas[@i].RespuestaUsuario" value="@Model.Preguntas[i].RespuestaUsuario" rows="3"></textarea>
-                </div>
-                <hr>
+                    <input type="hidden" name="Preguntas[@i].PreguntaTexto" value="@Model.Preguntas[i].PreguntaTexto" />
+                    <li class="list-group-item w-100 my-1">
+                        <p>@Model.Preguntas[i].PreguntaTexto</p>
+                        <div class="form-group">
+                            <label for="respuesta_@i" class="col-md-2 control-label">Respuesta:</label>
+                            <div class="col-md-10">
+                                <input type="text" id="respuesta_@i" name="Preguntas[@i].RespuestaUsuario" value="@Model.Preguntas[i].RespuestaUsuario" class="form-control" />
+                            </div>
+                        </div>
+                    </li>
                 }
 
             <input type="hidden" name="Resumen" value="@Model.Resumen" />
