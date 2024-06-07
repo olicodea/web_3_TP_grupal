@@ -27,32 +27,6 @@ public class ExamenService : IExamenService
         _logger = logger;
     }
 
-    public async Task<List<Examan>> GetAllExamenesAsync()
-    {
-        try
-        {
-            return await _context.Examen.Include(e => e.Pregunta).ToListAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al obtener todos los exámenes: {ex.Message}");
-            return new List<Examan>();
-        }
-    }
-
-    public async Task<Examan> GetExamenByIdAsync(int id)
-    {
-        try
-        {
-            return await _context.Examen.Include(e => e.Pregunta).FirstOrDefaultAsync(e => e.IdExamen == id);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al obtener el examen por ID: {ex.Message}");
-            return null;
-        }
-    }
-
     public async Task AddExamenAsync(ExamenViewModel examenModel)
     {
         try
@@ -68,8 +42,44 @@ public class ExamenService : IExamenService
         }
     }
 
+    //TODO: Probar y modificar metodos
+    public async Task<List<Examan>> GetAllExamenesAsync()
+    {
+        /*
+        try
+        {
+            return await _context.Examen.Include(e => e.Pregunta).ToListAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al obtener todos los exámenes: {ex.Message}");
+            return new List<Examan>();
+        }
+        */
+
+        return null;
+    }
+
+    public async Task<Examan> GetExamenByIdAsync(int id)
+    {
+        /*
+        try
+        {
+            return await _context.Examen.Include(e => e.Pregunta).FirstOrDefaultAsync(e => e.IdExamen == id);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error al obtener el examen por ID: {ex.Message}");
+            return null;
+        }
+        */
+
+        return null;
+    }
+
     public async Task UpdateExamenAsync(Examan examen)
     {
+        /*
         try
         {
             _context.Examen.Update(examen);
@@ -79,10 +89,12 @@ public class ExamenService : IExamenService
         {
             _logger.LogError($"Error al actualizar el examen: {ex.Message}");
         }
+        */
     }
 
     public async Task DeleteExamenAsync(int id)
     {
+        /*
         try
         {
             var examen = await _context.Examen.FirstOrDefaultAsync(e => e.IdExamen == id);
@@ -96,5 +108,6 @@ public class ExamenService : IExamenService
         {
             _logger.LogError($"Error al eliminar el examen: {ex.Message}");
         }
+        */
     }
 }
