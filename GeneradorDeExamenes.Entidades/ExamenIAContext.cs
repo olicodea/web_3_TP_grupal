@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GeneradorDeExamenes.Entidades;
 
-public partial class ExamenIAContext : DbContext
+public partial class ExamenIaContext : DbContext
 {
-    public ExamenIAContext()
+    public ExamenIaContext()
     {
     }
 
-    public ExamenIAContext(DbContextOptions<ExamenIAContext> options)
+    public ExamenIaContext(DbContextOptions<ExamenIaContext> options)
         : base(options)
     {
     }
@@ -27,17 +27,17 @@ public partial class ExamenIAContext : DbContext
     {
         modelBuilder.Entity<Examan>(entity =>
         {
-            entity.HasKey(e => e.IdExamen).HasName("PK__Examen__0E8DC9BEFC552D88");
+            entity.HasKey(e => e.IdExamen).HasName("PK__Examen__0E8DC9BE4AB36D21");
         });
 
         modelBuilder.Entity<Preguntum>(entity =>
         {
-            entity.HasKey(e => e.IdPregunta).HasName("PK__Pregunta__754EC09E3DB19625");
+            entity.HasKey(e => e.IdPregunta).HasName("PK__Pregunta__754EC09E6A00DE24");
 
             entity.HasOne(d => d.IdExamenNavigation).WithMany(p => p.Pregunta)
                 .HasForeignKey(d => d.IdExamen)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Pregunta__IdExam__4BAC3F29");
+                .HasConstraintName("FK__Pregunta__IdExam__5FB337D6");
         });
 
         OnModelCreatingPartial(modelBuilder);
