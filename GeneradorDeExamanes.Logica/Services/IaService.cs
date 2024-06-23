@@ -19,6 +19,7 @@ public interface IIaService
     public List<ExamenViewModel> GetExamenes();
     Task<string> ClasificarCategoriaAsync(string texto);
 
+    Task<string> CalificarExamenAsync(string texto);
 }
 public class IaService : IIaService
 {
@@ -105,6 +106,7 @@ public class IaService : IIaService
                 responseData.Candidates[0].Content != null && responseData.Candidates[0].Content.Parts != null)
             {
                 examen.Feedback = responseData.Candidates[0].Content.Parts[0].Text;
+
                 return examen;
             }
             else
@@ -182,6 +184,33 @@ public class IaService : IIaService
             return "Economía";
         else
             return "Sin categoría asignada"; 
+    }
+
+    public async Task<string> CalificarExamenAsync(string texto)
+    {
+        try
+        {
+            var requestBody = new
+            {
+                contents = new[] { new { parts = new[] { new { text = $"Quiero que me des una calificación para el examen teniendo en cuenta el feedback que diste sobre el mismo, solo tenes que decir un numero entre 1 y 10 nada mas. Tene en cuenta que no es necesario que las respuestas hayan sido perfectas, con que sean correctas en gran parte es suficiente para considerar el punto, como son 10 preguntas, vale 1 punto cada una. Recorda solo decir un numero entre 1 y 10 nada mas.\n {texto}" } } } }
+            };
+
+            var jsonResponse = await _apiService.PostAsync("v1/models/gemini-1.5-pro:generateContent", requestBody);
+            var responseData = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
+
+            if (responseData == null || responseData.Candidates == null || responseData.Candidates.Count == 0)
+            {
+                _logger.LogError("No se encontraron candidatos en la respuesta de la API.");
+                return null;
+            }
+
+            return responseData.Candidates[0].Content.Parts[0].Text;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Excepción al llamar al servicio de clasificación: {ex.Message}");
+            return null;
+        }
     }
 
 }

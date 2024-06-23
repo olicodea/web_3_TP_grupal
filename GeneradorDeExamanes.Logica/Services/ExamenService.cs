@@ -24,6 +24,7 @@ public class ExamenService : IExamenService
         _context = context;
         _logger = logger;
         _iaService = iaService;
+
     }
 
     public async Task AddExamenAsync(ExamenViewModel examenModel)
@@ -33,6 +34,7 @@ public class ExamenService : IExamenService
             
             string feedback = examenModel.Feedback;
             string categoria = await _iaService.ClasificarCategoriaAsync(feedback);
+            int calificacion = int.Parse(await _iaService.CalificarExamenAsync(feedback));
 
             if (string.IsNullOrEmpty(categoria))
             {
@@ -51,6 +53,7 @@ public class ExamenService : IExamenService
             
             var examen = examenModel.MapearAEntidad();
             examen.IdCategoria = idCategoria;
+            examen.Calificacion = calificacion;
 
           
             _context.Examen.Add(examen);
