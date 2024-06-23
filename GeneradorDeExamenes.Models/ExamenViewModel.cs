@@ -6,7 +6,8 @@ public class ExamenViewModel
 {
     public string Resumen { get; set; }
     public string Feedback { get; set; }
-
+    public int? IdCategoria { get; set; }
+    public string CategoriaNombre { get; set; }
     public List<PreguntaModel> Preguntas { get; set; } = new List<PreguntaModel>();
 
     public ExamenViewModel() { }
@@ -15,6 +16,8 @@ public class ExamenViewModel
     {
         Preguntas = PreguntaModel.ParsearLista(examen.Pregunta);
         Feedback = examen.Feedback;
+        IdCategoria = examen.IdCategoria;
+        CategoriaNombre = examen.Categoria?.Nombre;
     }
 
     public Examan MapearAEntidad()
@@ -22,7 +25,8 @@ public class ExamenViewModel
         return new Examan
         {
             Pregunta = PreguntaModel.ParsearListaAEntidad(Preguntas),
-            Feedback = Feedback
+            Feedback = Feedback,
+            IdCategoria = IdCategoria
         };
     }
 
