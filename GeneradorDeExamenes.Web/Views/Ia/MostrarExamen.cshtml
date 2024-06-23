@@ -1,22 +1,26 @@
-﻿<section id="central">
-    <h2>Resultado de examen #8 - Clasificacion 8/10</h2>
-    <div class="card-group" id="preguntas">
-        
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Pregunta #1</h5>
-                <p class="card-text">
-                    Some quick example text to build on the card title and make up the bulk of the
-                    card's content.
-                </p>
-                <h5 class="card-title">Respuesta <span class="signo_correcto">✔️</span></h5>
-                <p class="card-text">
-                    Some quick example text to build on the card title and make up the bulk of the
-                    card's content.
-                </p>
-                <hr>
-                <h6 class="card-subtitle mb-2 text-muted">Aqui va el feedback</h6>
-            </div>
+﻿@model ExamenViewModel
+
+@{
+    ViewData["Title"] = "Mostrar Examen";
+}
+<div class="container">
+    <h2 class="text-primary">Detalles del examen</h2>
+
+    @if (!string.IsNullOrEmpty(Model.Feedback))
+    {   
+        <div class="alert alert-info">
+            <pre>@Model.Feedback</pre>
         </div>
-    </div>
-</section>
+    }
+    else
+    {
+        <p class="text-warning">No se pudo obtener el feedback.</p>
+    }
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            <strong>Error:</strong>@ViewBag.Error
+        </div>
+    }
+</div>

@@ -1,18 +1,26 @@
-﻿<section id="central">
-    <h2>Resultado de examen #8 - Clasificacion 8/10</h2>
-    <div class="card-group" id="preguntas">
-       
-        
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Examen #9 - 01/06/2024</h5>
-                <h6 class="card-subtitle mb-2 text-muted">HISTORIA SIGLO XX</h6>
-                <hr>
-                <a href="" class="boton1 btn btn-lg btn-success w-100">Ver examen</a>
-            </div>
+﻿@using GeneradorDeExamenes.Models;
+@model List<ExamenViewModel>
+
+@{
+    ViewData["Title"] = "MostrarHistorial";
+}
+
+<section id="central">
+    <h2>Historial de exámenes</h2>
+    <div class="container">
+        <div class="row">
+            @foreach (var examen in Model)
+            {
+                <div class="col-md-3 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"> Examen #@examen.IdExamen</h5>
+
+                            <a href="@Url.Action("MostrarExamen", new { id = examen.IdExamen })" class="btn btn-lg btn-success w-100">Ver Detalle</a>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
-    
-
     </div>
-
 </section>

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace GeneradorDeExamenes.Entidades;
 
@@ -30,7 +28,6 @@ public partial class ExamenIaContext : DbContext
                       .HasForeignKey(d => d.IdCategoria)
                       .HasConstraintName("FK__Examen__IdCatego__5EBF139D");
         });
-
         modelBuilder.Entity<Preguntum>(entity =>
         {
             entity.HasKey(e => e.IdPregunta).HasName("PK__Pregunta__754EC09E6A00DE24");
