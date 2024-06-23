@@ -11,6 +11,7 @@ public partial class Examan
 
     public string Feedback { get; set; } = null!;
     public int? IdCategoria { get; set; }
+    public DateTime? FechaCreacion { get; set; } = DateTime.Now;
 
     public virtual Categoria Categoria { get; set; }
 
