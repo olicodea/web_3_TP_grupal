@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace GeneradorDeExamenes.Entidades;
 
@@ -21,7 +19,7 @@ public partial class ExamenIaContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-1N3OSRL\\SQLEXPRESS;Database=ExamenIA;Trusted_Connection=True;TrustServerCertificate=true;");
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-GE7Q6NA;Database=ExamenIA;Trusted_Connection=True;TrustServerCertificate=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,7 +27,6 @@ public partial class ExamenIaContext : DbContext
         {
             entity.HasKey(e => e.IdExamen).HasName("PK__Examen__0E8DC9BE4AB36D21");
         });
-
         modelBuilder.Entity<Preguntum>(entity =>
         {
             entity.HasKey(e => e.IdPregunta).HasName("PK__Pregunta__754EC09E6A00DE24");

@@ -2,9 +2,6 @@
 using GeneradorDeExamenes.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace GeneradorDeExamanes.Logica.Services;
 
@@ -45,7 +42,7 @@ public class ExamenService : IExamenService
     //TODO: Probar y modificar metodos
     public async Task<List<Examan>> GetAllExamenesAsync()
     {
-        /*
+
         try
         {
             return await _context.Examen.Include(e => e.Pregunta).ToListAsync();
@@ -55,26 +52,39 @@ public class ExamenService : IExamenService
             _logger.LogError($"Error al obtener todos los exámenes: {ex.Message}");
             return new List<Examan>();
         }
-        */
 
-        return null;
+
+
     }
 
-    public async Task<Examan> GetExamenByIdAsync(int id)
+    public async Task<Examan?> GetExamenByIdAsync(int id)
     {
-        /*
         try
         {
-            return await _context.Examen.Include(e => e.Pregunta).FirstOrDefaultAsync(e => e.IdExamen == id);
+            // Verifica que _context no sea nulo
+            if (_context == null)
+            {
+                throw new InvalidOperationException("Database context is not initialized.");
+            }
+
+            var examen = await _context.Examen
+                                       .Include(e => e.Pregunta) // Asegúrate de que Pregunta es una propiedad de navegación válida
+                                       .FirstOrDefaultAsync(e => e.IdExamen == id);
+
+            // Verifica que examen no sea nulo
+            if (examen == null)
+            {
+                _logger.LogWarning($"No se encontró ningún examen con el ID: {id}");
+            }
+
+            return examen;
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error al obtener el examen por ID: {ex.Message}");
+            // Verifica que _logger no sea nulo
+            _logger?.LogError($"Error al obtener el examen por ID: {ex.Message}");
             return null;
         }
-        */
-
-        return null;
     }
 
     public async Task UpdateExamenAsync(Examan examen)

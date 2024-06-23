@@ -1,4 +1,5 @@
 ﻿using GeneradorDeExamanes.Logica.Services;
+using GeneradorDeExamenes.Entidades;
 using GeneradorDeExamenes.Models;
 
 using Microsoft.AspNetCore.Mvc;
@@ -91,4 +92,34 @@ public class IaController : Controller
     {
         return View(examenModel);
     }
+
+    public async Task<IActionResult> MostrarHistorial()
+    {
+        var examenes = await _examenService.GetAllExamenesAsync();
+
+        if (examenes == null)
+        {
+            examenes = new List<Examan>();
+        }
+
+        var viewModel = ExamenViewModel.MapearLista(examenes.ToList());
+        return View(viewModel);
+    }
+
+    public async Task<IActionResult> MostrarExamen(int id)
+    {
+        var examen = await _examenService.GetExamenByIdAsync(id);
+
+        if (examen == null)
+        {
+            ViewBag.Error = "No se encontró el examen.";
+            return RedirectToAction("MostrarHistorial");
+        }
+
+        var viewModel = new ExamenViewModel(examen);
+        return View(viewModel);
+    }
+
+
+
 }

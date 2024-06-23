@@ -4,6 +4,8 @@ namespace GeneradorDeExamenes.Models;
 
 public class ExamenViewModel
 {
+    public int IdExamen { get; set; }
+    public int? Calificacion { get; set; }
     public string Resumen { get; set; }
     public string Feedback { get; set; }
 
@@ -13,6 +15,8 @@ public class ExamenViewModel
 
     public ExamenViewModel(Examan examen)
     {
+        IdExamen = examen.IdExamen;
+        Calificacion = examen.Calificacion;
         Preguntas = PreguntaModel.ParsearLista(examen.Pregunta);
         Feedback = examen.Feedback;
     }
@@ -21,6 +25,8 @@ public class ExamenViewModel
     {
         return new Examan
         {
+            IdExamen = IdExamen,
+            Calificacion = Calificacion,
             Pregunta = PreguntaModel.ParsearListaAEntidad(Preguntas),
             Feedback = Feedback
         };
