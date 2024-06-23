@@ -17,6 +17,7 @@ public interface IIaService
     Task<string[]> GenerateQuestions(ExamenViewModel examen);
     Task<ExamenViewModel> GetFeedback(ExamenViewModel examen);
     public List<ExamenViewModel> GetExamenes();
+    Task<string> ClasificarCategoriaAsync(string texto);
 
 }
 public class IaService : IIaService
@@ -132,6 +133,55 @@ public class IaService : IIaService
     public List<ExamenViewModel> GetExamenes()
     {
         return _examenes;
+    }
+
+    public async Task<string> ClasificarCategoriaAsync(string texto)
+    {
+        try
+        {
+            var requestBody = new
+            {
+                contents = new[] { new { parts = new[] { new { text = $"Quiero que me digas a que rama pertenece este texto, solo quiero que elijas 1, solo dime la palabra, nada mas: Arte, Naturales, Informática, Sociales, Economía. {texto}" } } } }
+            };
+
+            var jsonResponse = await _apiService.PostAsync("v1/models/gemini-1.5-pro:generateContent", requestBody);
+            var responseData = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
+
+            if (responseData == null || responseData.Candidates == null || responseData.Candidates.Count == 0)
+            {
+                _logger.LogError("No se encontraron candidatos en la respuesta de la API.");
+                return null;
+            }
+
+            string categoria = responseData.Candidates[0].Content.Parts[0].Text;
+           
+            string categoriaAsignada = MapCategoria(categoria);
+
+            return categoriaAsignada;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Excepción al llamar al servicio de clasificación: {ex.Message}");
+            return null;
+        }
+    }
+
+    private string MapCategoria(string categoriaObtenida)
+    {
+
+
+        if (categoriaObtenida.Contains("arte", StringComparison.OrdinalIgnoreCase))
+            return "Arte";
+        else if (categoriaObtenida.Contains("naturales", StringComparison.OrdinalIgnoreCase))
+            return "Naturales";
+        else if (categoriaObtenida.Contains("informática", StringComparison.OrdinalIgnoreCase))
+            return "Informática";
+        else if (categoriaObtenida.Contains("sociales", StringComparison.OrdinalIgnoreCase))
+            return "Sociales";
+        else if (categoriaObtenida.Contains("economía", StringComparison.OrdinalIgnoreCase))
+            return "Economía";
+        else
+            return "Sin categoría asignada"; 
     }
 
 }

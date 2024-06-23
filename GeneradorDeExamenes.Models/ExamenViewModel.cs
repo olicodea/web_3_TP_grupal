@@ -8,7 +8,8 @@ public class ExamenViewModel
     public int? Calificacion { get; set; }
     public string Resumen { get; set; }
     public string Feedback { get; set; }
-
+    public int? IdCategoria { get; set; }
+    public string CategoriaNombre { get; set; }
     public List<PreguntaModel> Preguntas { get; set; } = new List<PreguntaModel>();
 
     public ExamenViewModel() { }
@@ -19,6 +20,8 @@ public class ExamenViewModel
         Calificacion = examen.Calificacion;
         Preguntas = PreguntaModel.ParsearLista(examen.Pregunta);
         Feedback = examen.Feedback;
+        IdCategoria = examen.IdCategoria;
+        CategoriaNombre = examen.Categoria?.Nombre;
     }
 
     public Examan MapearAEntidad()
@@ -28,7 +31,8 @@ public class ExamenViewModel
             IdExamen = IdExamen,
             Calificacion = Calificacion,
             Pregunta = PreguntaModel.ParsearListaAEntidad(Preguntas),
-            Feedback = Feedback
+            Feedback = Feedback,
+            IdCategoria = IdCategoria
         };
     }
 
