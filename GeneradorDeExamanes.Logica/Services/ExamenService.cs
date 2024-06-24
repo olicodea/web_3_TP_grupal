@@ -12,6 +12,7 @@ public interface IExamenService
     Task AddExamenAsync(ExamenViewModel examen);
     Task UpdateExamenAsync(Examan examen);
     Task DeleteExamenAsync(int id);
+    public List<Examan> ListarPorCategoria(int idCategoria);
 }
 public class ExamenService : IExamenService
 {
@@ -93,6 +94,12 @@ public class ExamenService : IExamenService
 
 
 
+    }
+    public List<Examan> ListarPorCategoria(int idCategoria)
+    {
+        return _context.Examen
+            .Where(e => e.IdCategoria == idCategoria)
+            .ToList();
     }
 
     public async Task<Examan?> GetExamenByIdAsync(int id)
