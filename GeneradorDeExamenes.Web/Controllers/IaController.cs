@@ -10,11 +10,13 @@ public class IaController : Controller
 {
     private readonly IIaService _iaService;
     private readonly IExamenService _examenService;
+    private readonly ICategoriaService _categoriaService;
 
-    public IaController(IIaService iaService, IExamenService examenService)
+    public IaController(IIaService iaService, IExamenService examenService, ICategoriaService categoriaService)
     {
         _iaService = iaService;
         _examenService = examenService;
+        _categoriaService = categoriaService;
     }
 
     public IActionResult GeneradorPreguntas()
@@ -93,17 +95,29 @@ public class IaController : Controller
         return View(examenModel);
     }
 
-    public async Task<IActionResult> MostrarHistorial()
+    public async Task<IActionResult> MostrarHistorial(int? idCategoria)
     {
-        var examenes = await _examenService.GetAllExamenesAsync();
-
-        if (examenes == null)
+        ViewBag.Categorias = _categoriaService.Listar();
+        ViewBag.IdCategoriaSeleccionada = idCategoria;
+        if(idCategoria.HasValue)
         {
-            examenes = new List<Examan>();
+            var examenes = _examenService.ListarPorCategoria(idCategoria.Value);
+            var viewModel = ExamenViewModel.MapearLista(examenes.ToList());
+            return View(viewModel);
         }
+        else
+        {
+            var examenes = await _examenService.GetAllExamenesAsync();
 
-        var viewModel = ExamenViewModel.MapearLista(examenes.ToList());
-        return View(viewModel);
+            if (examenes == null)
+            {
+                examenes = new List<Examan>();
+            }
+
+            var viewModel = ExamenViewModel.MapearLista(examenes.ToList());
+            return View(viewModel);
+        }
+        
     }
 
     public async Task<IActionResult> MostrarExamen(int id)

@@ -25,6 +25,7 @@ builder.Services.AddDbContext<ExamenIaContext>(options => options.UseSqlServer(b
 builder.Services.AddHttpClient<IApiService, ApiService>();
 builder.Services.AddSingleton<IIaService, IaService>();
 builder.Services.AddScoped<IExamenService, ExamenService>();
+builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 
 var app = builder.Build();
 

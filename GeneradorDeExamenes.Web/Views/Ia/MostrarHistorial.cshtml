@@ -7,6 +7,30 @@
 
 <section id="central">
     <h2>Historial de exámenes</h2>
+
+    <form method="get" asp-action="MostrarHistorial" class="form-inline mb-3">
+        <div class="form-group mx-sm-3 mb-2">
+            <h5 class="card-title mr-2" for="IdCategoria">
+                Categoría:
+            </h5>
+            <select id="IdCategoria" name="IdCategoria" class="form-control">
+                <option value="">Todas</option>
+                @foreach (var categoria in ViewBag.Categorias)
+                {
+                    if (ViewBag.IdCategoriaSeleccionada == categoria.IdCategoria)
+                    {
+                        <option selected="selected" value="@categoria.IdCategoria">@categoria.Nombre</option>
+                    }
+                    else
+                    {
+                        <option value="@categoria.IdCategoria">@categoria.Nombre</option>
+                    }
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success mb-2">Filtrar</button>
+    </form>
+
     <div class="container">
         <div class="row">
             @foreach (var examen in Model)
@@ -15,7 +39,6 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title"> Examen #@examen.IdExamen</h5>
-
                             <a href="@Url.Action("MostrarExamen", new { id = examen.IdExamen })" class="btn btn-lg btn-success w-100">Ver Detalle</a>
                         </div>
                     </div>
