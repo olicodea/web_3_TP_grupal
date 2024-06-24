@@ -10,6 +10,7 @@ public class ExamenViewModel
     public string Feedback { get; set; }
     public int? IdCategoria { get; set; }
     public string CategoriaNombre { get; set; }
+    public DateTime? FechaCreacion { get; set; } = DateTime.Now;
     public List<PreguntaModel> Preguntas { get; set; } = new List<PreguntaModel>();
 
     public ExamenViewModel() { }
@@ -21,7 +22,7 @@ public class ExamenViewModel
         Preguntas = PreguntaModel.ParsearLista(examen.Pregunta);
         Feedback = examen.Feedback;
         IdCategoria = examen.IdCategoria;
-        CategoriaNombre = examen.Categoria?.Nombre;
+        FechaCreacion = examen.FechaCreacion;
     }
 
     public Examan MapearAEntidad()
@@ -32,7 +33,8 @@ public class ExamenViewModel
             Calificacion = Calificacion,
             Pregunta = PreguntaModel.ParsearListaAEntidad(Preguntas),
             Feedback = Feedback,
-            IdCategoria = IdCategoria
+            IdCategoria = IdCategoria,
+            FechaCreacion = FechaCreacion
         };
     }
 
@@ -40,6 +42,8 @@ public class ExamenViewModel
     {
         return examenes.ConvertAll(e => new ExamenViewModel(e));
     }
+
+
 }
 
 public class PreguntaModel

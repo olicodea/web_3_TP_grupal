@@ -13,6 +13,7 @@ public interface IExamenService
     Task UpdateExamenAsync(Examan examen);
     Task DeleteExamenAsync(int id);
     public List<Examan> ListarPorCategoria(int idCategoria);
+
 }
 public class ExamenService : IExamenService
 {
@@ -32,7 +33,7 @@ public class ExamenService : IExamenService
     {
         try
         {
-            
+
             string feedback = examenModel.Feedback;
             string categoria = await _iaService.ClasificarCategoriaAsync(feedback);
             int calificacion = int.Parse(await _iaService.CalificarExamenAsync(feedback));
@@ -43,7 +44,7 @@ public class ExamenService : IExamenService
                 _logger.LogWarning("La clasificacion del examen sera: Otra");
             }
 
-          
+
             int idCategoria = await GetCategoriaIdPorNombreAsync(categoria);
             if (idCategoria == 0)
             {
@@ -51,18 +52,18 @@ public class ExamenService : IExamenService
                 return;
             }
 
-            
+
             var examen = examenModel.MapearAEntidad();
             examen.IdCategoria = idCategoria;
             examen.Calificacion = calificacion;
 
-          
+
             _context.Examen.Add(examen);
             await _context.SaveChangesAsync();
         }
         catch (DbUpdateException ex)
         {
-            
+
             var innerException = ex.InnerException;
             while (innerException != null && innerException.InnerException != null)
             {
@@ -170,10 +171,10 @@ public class ExamenService : IExamenService
     {
         try
         {
-            
+
             string nombreCategoriaLower = nombreCategoria.ToLower();
 
-           
+
             var categoria = await _context.Categoria
                 .FirstOrDefaultAsync(c => c.Nombre.ToLower() == nombreCategoriaLower);
 
@@ -184,14 +185,16 @@ public class ExamenService : IExamenService
             else
             {
                 _logger.LogError($"La categoría '{nombreCategoria}' no existe en la base de datos.");
-                return 0; 
+                return 0;
             }
         }
         catch (Exception ex)
         {
             _logger.LogError($"Error al obtener el ID de la categoría por nombre: {ex.Message}");
-            return 0; 
+            return 0;
         }
     }
+
+
 
 }

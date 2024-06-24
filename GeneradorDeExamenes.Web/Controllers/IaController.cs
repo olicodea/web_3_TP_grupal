@@ -99,7 +99,7 @@ public class IaController : Controller
     {
         ViewBag.Categorias = _categoriaService.Listar();
         ViewBag.IdCategoriaSeleccionada = idCategoria;
-        if(idCategoria.HasValue)
+        if (idCategoria.HasValue)
         {
             var examenes = _examenService.ListarPorCategoria(idCategoria.Value);
             var viewModel = ExamenViewModel.MapearLista(examenes.ToList());
@@ -117,13 +117,13 @@ public class IaController : Controller
             var viewModel = ExamenViewModel.MapearLista(examenes.ToList());
             return View(viewModel);
         }
-        
+
     }
 
     public async Task<IActionResult> MostrarExamen(int id)
     {
         var examen = await _examenService.GetExamenByIdAsync(id);
-
+        ViewBag.Categoria = _categoriaService.GetCategoriaPorId((int)examen.IdCategoria);
         if (examen == null)
         {
             ViewBag.Error = "No se encontró el examen.";
