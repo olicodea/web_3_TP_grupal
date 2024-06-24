@@ -183,7 +183,7 @@ public class IaService : IIaService
         else if (categoriaObtenida.Contains("economía", StringComparison.OrdinalIgnoreCase))
             return "Economía";
         else
-            return "Sin categoría asignada"; 
+            return "Otra"; 
     }
 
     public async Task<string> CalificarExamenAsync(string texto)
