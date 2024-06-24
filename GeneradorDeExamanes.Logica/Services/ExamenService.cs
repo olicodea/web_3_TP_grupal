@@ -39,8 +39,8 @@ public class ExamenService : IExamenService
 
             if (string.IsNullOrEmpty(categoria))
             {
-                _logger.LogWarning("No se pudo clasificar la categoría del examen.");
-                return;
+                categoria = "Otra";
+                _logger.LogWarning("La clasificacion del examen sera: Otra");
             }
 
           
