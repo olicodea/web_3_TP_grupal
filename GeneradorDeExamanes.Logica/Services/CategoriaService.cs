@@ -1,16 +1,11 @@
 ﻿using GeneradorDeExamenes.Entidades;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GeneradorDeExamanes.Logica.Services
 {
     public interface ICategoriaService
     {
         public List<Categoria> Listar();
-
+        public string GetCategoriaPorId(int id);
     }
     public class CategoriaService : ICategoriaService
     {
@@ -26,5 +21,13 @@ namespace GeneradorDeExamanes.Logica.Services
                 .OrderBy(c => c.Nombre)
                 .ToList();
         }
+        public string GetCategoriaPorId(int id)
+        {
+            return _context.Categoria
+                .Where(c => c.IdCategoria == id)
+                .Select(c => c.Nombre)
+                .FirstOrDefault();
+        }
+
     }
 }
