@@ -22,6 +22,7 @@ public class ExamenViewModel
         Preguntas = PreguntaModel.ParsearLista(examen.Pregunta);
         Feedback = examen.Feedback;
         IdCategoria = examen.IdCategoria;
+        CategoriaNombre = examen.Categoria.Nombre;
         FechaCreacion = examen.FechaCreacion;
     }
 

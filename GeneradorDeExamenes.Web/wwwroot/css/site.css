@@ -95,7 +95,7 @@ section#central {
     align-items: center;
     width: 100vh;
     margin: 0 auto;
-    padding: 50px;
+    padding: 50px 10px;
 }
 
 form {

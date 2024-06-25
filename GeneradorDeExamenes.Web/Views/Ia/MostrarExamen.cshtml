@@ -3,23 +3,32 @@
 @{
     ViewData["Title"] = "Mostrar Examen";
 }
-<div class="container">
-    <h2 class="text-primary">Detalles del examen</h2>
+<div class="px-0 container">
+    <h2 class="text-success mt-4 mb-3">Detalles del examen</h2>
 
     @if (!string.IsNullOrEmpty(Model.Feedback))
     {   
-        
-        <div class="alert alert-info">
-            <pre>Categoria: @ViewBag.Categoria</pre>
+        <div class="d-flex gap-3">
+            <div class="alert alert-success d-flex align-items-center text-center">
+                Categoria:
+                <div class="ms-2 fw-bold">
+                    @Model.CategoriaNombre
+                </div>
+            </div>
+            <div class="alert alert-success d-flex align-items-center text-center">
+                Calificacion:
+                <div class="ms-2 fw-bold">
+                    @Model.Calificacion
+                    </div>
+            </div>
+            <div class="alert alert-success d-flex align-items-center text-center">
+                Fecha:
+                <div class="ms-2 fw-bold">
+                    @Model.FechaCreacion
+                    </div>
+            </div>
         </div>
-        <div class="alert alert-info">
-            <pre>Calificacion: @Model.Calificacion</pre>
-        </div>
-        <div class="alert alert-info">
-            <pre>Fecha: @Model.FechaCreacion</pre>
-        </div>
-        
-        <div class="alert alert-info">
+        <div class="alert alert-info overflow-auto">
             <pre>@Model.Feedback</pre>
         </div>
     }

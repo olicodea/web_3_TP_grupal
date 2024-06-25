@@ -6,11 +6,11 @@
 }
 
 <section id="central">
-    <h2>Historial de exámenes</h2>
+    <h2 class="pb-3">Historial de exámenes</h2>
 
-    <form method="get" asp-action="MostrarHistorial" class="form-inline mb-3">
-        <div class="form-group mx-sm-3 mb-2">
-            <h5 class="card-title mr-2" for="IdCategoria">
+    <form method="get" asp-action="MostrarHistorial" class="form-inline mb-5">
+        <div class="form-group mx-sm-3 mb-2 w-100 d-flex gap-3 align-items-center justify-content-between">
+            <h5 class="card-title" for="IdCategoria">
                 Categoría:
             </h5>
             <select id="IdCategoria" name="IdCategoria" class="form-control">
@@ -27,23 +27,24 @@
                     }
                 }
             </select>
+       
+            <button type="submit" class="btn btn-success">Filtrar</button>
         </div>
-        <button type="submit" class="btn btn-success mb-2">Filtrar</button>
     </form>
 
-    <div class="container">
-        <div class="row">
-            @foreach (var examen in Model)
-            {
-                <div class="col-md-3 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title"> Examen #@examen.IdExamen</h5>
-                            <a href="@Url.Action("MostrarExamen", new { id = examen.IdExamen })" class="btn btn-lg btn-success w-100">Ver Detalle</a>
-                        </div>
+    <div class="row w-100">
+        @foreach (var examen in Model)
+        {
+            <div class="col-4 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title"> Examen #@examen.IdExamen - @String.Format("{0:dd/MM/yyyy}", examen.FechaCreacion)</h5>
+                        <p class="mb-0" style="font-size: 18px;"><b>Calificación: </b> @examen.Calificacion</p>
+                        <p class="mb-3" style="font-size: 18px;"><b>Categoría: </b> @examen.CategoriaNombre</p>
+                        <a href="@Url.Action("MostrarExamen", new { id = examen.IdExamen })" class="btn btn-md btn-success w-100 fw-bold">Ver Detalle</a>
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
     </div>
 </section>

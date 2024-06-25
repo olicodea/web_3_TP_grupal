@@ -123,7 +123,7 @@ public class IaController : Controller
     public async Task<IActionResult> MostrarExamen(int id)
     {
         var examen = await _examenService.GetExamenByIdAsync(id);
-        ViewBag.Categoria = _categoriaService.GetCategoriaPorId((int)examen.IdCategoria);
+
         if (examen == null)
         {
             ViewBag.Error = "No se encontró el examen.";

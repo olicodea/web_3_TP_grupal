@@ -10,8 +10,6 @@ public interface IExamenService
     Task<List<Examan>> GetAllExamenesAsync();
     Task<Examan> GetExamenByIdAsync(int id);
     Task AddExamenAsync(ExamenViewModel examen);
-    Task UpdateExamenAsync(Examan examen);
-    Task DeleteExamenAsync(int id);
     public List<Examan> ListarPorCategoria(int idCategoria);
 
 }
@@ -85,7 +83,7 @@ public class ExamenService : IExamenService
 
         try
         {
-            return await _context.Examen.Include(e => e.Pregunta).ToListAsync();
+            return await _context.Examen.Include(e => e.Pregunta).Include(e => e.Categoria).ToListAsync();
         }
         catch (Exception ex)
         {
@@ -115,6 +113,7 @@ public class ExamenService : IExamenService
 
             var examen = await _context.Examen
                                        .Include(e => e.Pregunta) // Asegúrate de que Pregunta es una propiedad de navegación válida
+                                       .Include(e => e.Categoria)
                                        .FirstOrDefaultAsync(e => e.IdExamen == id);
 
             // Verifica que examen no sea nulo
@@ -132,41 +131,6 @@ public class ExamenService : IExamenService
             return null;
         }
     }
-
-    public async Task UpdateExamenAsync(Examan examen)
-    {
-        /*
-        try
-        {
-            _context.Examen.Update(examen);
-            await _context.SaveChangesAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al actualizar el examen: {ex.Message}");
-        }
-        */
-    }
-
-    public async Task DeleteExamenAsync(int id)
-    {
-        /*
-        try
-        {
-            var examen = await _context.Examen.FirstOrDefaultAsync(e => e.IdExamen == id);
-            if (examen != null)
-            {
-                _context.Examen.Remove(examen);
-                await _context.SaveChangesAsync();
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al eliminar el examen: {ex.Message}");
-        }
-        */
-    }
-
     public async Task<int> GetCategoriaIdPorNombreAsync(string nombreCategoria)
     {
         try
