@@ -19,7 +19,7 @@
                         <div class="form-group">
                             <label for="respuesta_@i" class="col-md-2 control-label">Respuesta:</label>
                             <div class="col-md-10">
-                                <input type="text" id="respuesta_@i" name="Preguntas[@i].RespuestaUsuario" value="@Model.Preguntas[i].RespuestaUsuario" class="form-control" />
+                                <textarea  id="respuesta_@i" name="Preguntas[@i].RespuestaUsuario" class="form-control text-left">@Model.Preguntas[i].RespuestaUsuario</textarea>
                             </div>
                         </div>
                     </li>
